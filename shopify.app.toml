@@ -1,0 +1,27 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+name = "quiz-app"
+client_id = "33bb8f7b29ea1b92de775cda40c64320"
+application_url = "https://guide-themselves-polish-discrimination.trycloudflare.com"
+embedded = true
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "write_products"
+
+[auth]
+redirect_urls = [
+  "https://guide-themselves-polish-discrimination.trycloudflare.com/auth/callback",
+  "https://guide-themselves-polish-discrimination.trycloudflare.com/auth/shopify/callback",
+  "https://guide-themselves-polish-discrimination.trycloudflare.com/api/auth/callback"
+]
+
+[webhooks]
+api_version = "2023-10"
+
+[pos]
+embedded = false
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "appmixo-disha.myshopify.com"

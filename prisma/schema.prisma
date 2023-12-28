@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("URL")
+}
+
+model Session {
+  session_id  String    @id @default(auto()) @map("_id") @db.ObjectId
+  id          String    @unique
+  shop        String
+  state       String
+  isOnline    Boolean   @default(false)
+  scope       String?
+  expires     DateTime?
+  accessToken String
+  userId      BigInt?
+}
+
+model Shop {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  shop          String   @unique @map("shop")
+  accessToken   String   @map("accessToken")
+  phone         String?  @map("phone")
+  name          String   @map("name")
+  countryCode   String?  @map("countryCode")
+  countryName   String?  @map("countryName")
+  accessScope   String?  @map("accessScope")
+  timestamp     Int?     @map("timestamp")
+  domain        String?  @unique @map("domain")
+  email         String?  @map("email")
+  customerEmail String?  @map("customerEmail")
+  moneyFormat   String?  @map("moneyFormat")
+  appStatus     String?  @default("installed") @map("appStatus")
+  currency      String?  @map("currency")
+  timezone      String?  @map("timezone")
+  address1      String?  @map("address1")
+  address2      String?  @map("address2")
+  zip           String?  @map("zip")
+  city          String?  @map("city")
+  shopOwner     String?  @map("shopOwner")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model quiz {
+  question_id         String @id @default(auto()) @map("_id") @db.ObjectId
+  topicName           String @map("topicName")
+  question            String @map("question")
+  answerA             String @map("answerA")
+  answerB             String @map("answerB")
+  answerC             String @map("answerC")
+  answerD             String @map("answerD")
+  correctAnswerString String @map("correctAnswer")
+}
