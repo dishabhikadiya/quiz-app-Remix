@@ -18,7 +18,6 @@ import {
   useParams,
   useSubmit,
 } from "@remix-run/react";
-import questions from "./questions";
 import { EditMajor } from "@shopify/polaris-icons";
 import { DeleteMajor } from "@shopify/polaris-icons";
 import pagecss from "../data.css";
