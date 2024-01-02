@@ -2,7 +2,7 @@
 
 name = "quiz-app"
 client_id = "33bb8f7b29ea1b92de775cda40c64320"
-application_url = "https://guide-themselves-polish-discrimination.trycloudflare.com"
+application_url = "https://cambodia-answering-upcoming-informational.trycloudflare.com"
 embedded = true
 
 [access_scopes]
@@ -11,9 +11,9 @@ scopes = "write_products"
 
 [auth]
 redirect_urls = [
-  "https://guide-themselves-polish-discrimination.trycloudflare.com/auth/callback",
-  "https://guide-themselves-polish-discrimination.trycloudflare.com/auth/shopify/callback",
-  "https://guide-themselves-polish-discrimination.trycloudflare.com/api/auth/callback"
+  "https://cambodia-answering-upcoming-informational.trycloudflare.com/auth/callback",
+  "https://cambodia-answering-upcoming-informational.trycloudflare.com/auth/shopify/callback",
+  "https://cambodia-answering-upcoming-informational.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

@@ -49,12 +49,19 @@ model Shop {
 }
 
 model quiz {
-  question_id         String @id @default(auto()) @map("_id") @db.ObjectId
-  topicName           String @map("topicName")
-  question            String @map("question")
-  answerA             String @map("answerA")
-  answerB             String @map("answerB")
-  answerC             String @map("answerC")
-  answerD             String @map("answerD")
-  correctAnswerString String @map("correctAnswer")
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  topicName String     @map("topicName")
+  question  question[]
+}
+
+model question {
+  id            String  @id @default(auto()) @map("_id") @db.ObjectId
+  quiz          quiz?   @relation(fields: [quizId], references: [id])
+  quizId        String? @db.ObjectId
+  question      String
+  answerA       String
+  answerB       String
+  answerC       String
+  answerD       String
+  correctAnswer String
 }

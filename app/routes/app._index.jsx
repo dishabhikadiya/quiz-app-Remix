@@ -22,7 +22,8 @@ export const loader = async ({ request }) => {
   const data = await prisma.quiz.findMany({
     select: {
       topicName: true,
-      question_id: true,
+      id: true,
+      question: true,
     },
   });
   return data;
@@ -44,7 +45,7 @@ export const action = async ({ request }) => {
   if (request.method === "PUT") {
     const topicName = body.get("topicName");
     const update = await prisma.quiz.update({
-      where: { question_id: id },
+      where: { id: id },
       data: {
         topicName: topicName,
       },
@@ -52,9 +53,9 @@ export const action = async ({ request }) => {
     return json({ update });
   }
   if (request.method === "DELETE") {
-    const deleteQuiz = await prisma.quiz.delete({ where: { question_id: id } });
-    return deleteQuiz;
+    const deleteQuiz = await prisma.quiz.delete({ where: { id: id } });
   }
+  return null;
 };
 
 export default function Index() {
@@ -83,7 +84,7 @@ export default function Index() {
     submit({ topicName, id }, { method: "PUT" });
   };
   const handleDelete = () => {
-    submit({ id }, { method: "DELETE" });
+    submit({ id: id }, { method: "DELETE" });
   };
   const handleCreate = () => {
     submit({ topicname }, { method: "POST" });
@@ -124,7 +125,7 @@ export default function Index() {
                 variant="tertiary"
                 icon={ViewMajor}
                 onClick={() => {
-                  nevi("/app/question");
+                  nevi(`/app/list/${data.id}`, { state: { data: data } });
                 }}
               ></Button>
               <Button
@@ -132,14 +133,15 @@ export default function Index() {
                 icon={EditMajor}
                 onClick={() => {
                   handleChange();
-                  setId(data.question_id);
+                  setId(data.id);
                 }}
               ></Button>
               <Button
                 variant="tertiary"
                 icon={DeleteMajor}
                 onClick={() => {
-                  handleChange1(data.question_id);
+                  handleChange1();
+                  setId(data.id);
                 }}
               ></Button>
             </div>
