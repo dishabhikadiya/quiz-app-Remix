@@ -70,7 +70,19 @@ export default function Index() {
   const actionData = useActionData();
   const submit = useSubmit();
   const handleChange1 = useCallback(() => setActiv1(!active1), [active1]);
-  const handleChange = useCallback(() => setActiv(!active), [active]);
+  const handleChange = useCallback(() => {
+    setActiv(!active);
+  }, [active]);
+
+  useEffect(() => {
+    if (id && loaderData) {
+      const selectedData = loaderData.find((data) => data?.id === id);
+      if (selectedData) {
+        setTopicName(selectedData.topicName);
+      }
+    }
+  }, [loaderData, id]);
+
   const handleChange2 = useCallback(() => setActives(!actives), [actives]);
   const handleChangeText = useCallback(
     (newValue) => setTopicName(newValue),
