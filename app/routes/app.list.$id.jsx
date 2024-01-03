@@ -26,7 +26,6 @@ import prisma from "../db.server";
 export const links = () => [{ rel: "stylesheet", href: pagecss }];
 export const loader = async ({ request, params }) => {
   await authenticate.admin(request);
-  console.log("params", params);
   const data = await prisma.question.findMany({
     where: { quizId: params.id },
   });
@@ -70,7 +69,6 @@ const list = () => {
   const nav = useNavigate();
   const submit = useSubmit();
   const loaderdata = useLoaderData();
-  console.log(loaderdata);
   const map = useLocation();
   const TopicName = map?.state?.data?.topicName;
   const quizId = map?.state?.data?.id;
