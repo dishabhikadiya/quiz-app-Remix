@@ -5,7 +5,7 @@ import {
   useNavigate,
   useSubmit,
 } from "@remix-run/react";
-import { Button, Card, Modal, TextField } from "@shopify/polaris";
+import { Button, Card, Modal, Spinner, TextField } from "@shopify/polaris";
 import { json } from "@remix-run/node";
 import { authenticate } from "../shopify.server";
 import { Frame, ContextualSaveBar } from "@shopify/polaris";
@@ -61,6 +61,7 @@ export const action = async ({ request }) => {
 export default function Index() {
   const nevi = useNavigate();
   const loaderData = useLoaderData();
+  const [loading, setLoading] = useState(false);
   const [active1, setActiv1] = useState(false);
   const [active, setActiv] = useState(false);
   const [actives, setActives] = useState(false);
@@ -97,6 +98,7 @@ export default function Index() {
   };
   const handleDelete = () => {
     submit({ id: id }, { method: "DELETE" });
+    setActiv1(false);
   };
   const handleCreate = () => {
     submit({ topicname }, { method: "POST" });
@@ -106,60 +108,67 @@ export default function Index() {
       setActiv1(false);
       setActiv(false);
       setActives(false);
+      setLoading(false);
     }
   }, [actionData]);
+
   return (
     <div style={{ height: "250px" }}>
-      <Frame>
-        <ContextualSaveBar message="Quizzify" />
-        <br />
-        <br />
-        <br />
-        <br />
-        <Button
-          icon={AddMajor}
-          variant="monochromePlain"
-          onClick={() => {
-            handleChange2();
-          }}
-        >
-          Create Quiz
-        </Button>
-        <br />
-        <br />
-        {loaderData?.map((data) => [
-          <Card>
-            <div className="card">
-              <p>{data.topicName}</p>
-            </div>
-            <div className="btn-1">
-              <Button
-                variant="tertiary"
-                icon={ViewMajor}
-                onClick={() => {
-                  nevi(`/app/list/${data.id}`, { state: { data: data } });
-                }}
-              ></Button>
-              <Button
-                variant="tertiary"
-                icon={EditMajor}
-                onClick={() => {
-                  handleChange();
-                  setId(data.id);
-                }}
-              ></Button>
-              <Button
-                variant="tertiary"
-                icon={DeleteMajor}
-                onClick={() => {
-                  handleChange1();
-                  setId(data.id);
-                }}
-              ></Button>
-            </div>
-          </Card>,
-        ])}
-      </Frame>
+      {loading ? (
+        <Spinner accessibilityLabel="Spinner example" size="large" />
+      ) : (
+        <Frame>
+          <ContextualSaveBar message="Quizzify" />
+          <br />
+          <br />
+          <br />
+          <br />
+          <Button
+            icon={AddMajor}
+            variant="monochromePlain"
+            onClick={() => {
+              handleChange2();
+            }}
+          >
+            Create Quiz
+          </Button>
+          <br />
+          <br />
+          {loaderData?.map((data) => [
+            <Card>
+              <div className="card">
+                <p>{data.topicName}</p>
+              </div>
+              <div className="btn-1">
+                <Button
+                  variant="tertiary"
+                  icon={ViewMajor}
+                  onClick={() => {
+                    nevi(`/app/list/${data.id}`, { state: { data: data } });
+                  }}
+                ></Button>
+                <Button
+                  variant="tertiary"
+                  icon={EditMajor}
+                  onClick={() => {
+                    handleChange();
+                    setId(data.id);
+                  }}
+                ></Button>
+                <Button
+                  variant="tertiary"
+                  icon={DeleteMajor}
+                  onClick={() => {
+                    handleChange1();
+                    setId(data.id);
+                  }}
+                ></Button>
+              </div>
+            </Card>,
+          ])}
+        </Frame>
+      )}
+      {/* {loader ? <Spinner size="small" /> : "save"} */}
       <Frame>
         <Modal open={active1} onClose={handleChange1} title="Delete">
           <Modal.Section>

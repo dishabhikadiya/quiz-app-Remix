@@ -6,11 +6,13 @@ import {
   LegacyStack,
   Modal,
   Page,
+  Spinner,
   TextField,
 } from "@shopify/polaris";
 import { MobileBackArrowMajor } from "@shopify/polaris-icons";
 import {
   useActionData,
+  useLoaderData,
   useLocation,
   useNavigate,
   useSubmit,
@@ -22,6 +24,14 @@ import { authenticate } from "../shopify.server";
 import prisma from "../db.server";
 
 export const links = () => [{ rel: "stylesheet", href: pagecss }];
+export const loader = async ({ request, params }) => {
+  await authenticate.admin(request);
+  console.log("params", params);
+  const data = await prisma.question.findMany({
+    where: { quizId: params.id },
+  });
+  return data;
+};
 export const action = async ({ request }) => {
   const { admin } = await authenticate.admin(request);
   const body = await request.formData();
@@ -59,12 +69,12 @@ export const action = async ({ request }) => {
 const list = () => {
   const nav = useNavigate();
   const submit = useSubmit();
+  const loaderdata = useLoaderData();
+  console.log(loaderdata);
   const map = useLocation();
   const TopicName = map?.state?.data?.topicName;
-  const Questions = map?.state?.data;
   const quizId = map?.state?.data?.id;
   const action = useActionData();
-
   const [state, setState] = useState({
     modalType: null,
     id: "",
@@ -102,9 +112,20 @@ const list = () => {
 
   const handleChangee = useCallback(
     (id) => {
-      setState({ ...state, modalType: "edit", id });
+      const selectedQuestion = loaderdata.find((data) => data.id === id);
+      setState({
+        ...state,
+        modalType: "edit",
+        id: selectedQuestion.id,
+        question: selectedQuestion.question,
+        answerA: selectedQuestion.answerA,
+        answerB: selectedQuestion.answerB,
+        answerC: selectedQuestion.answerC,
+        answerD: selectedQuestion.answerD,
+        correctAnswer: selectedQuestion.correctAnswer,
+      });
     },
-    [state]
+    [state, loaderdata]
   );
 
   const handleCorrectAnswer = useCallback(
@@ -242,7 +263,7 @@ const list = () => {
                   handleCreate();
                 }}
               >
-                Save
+                save
               </Button>
               &nbsp;
               <Button onClick={handleChange}>Cancel</Button>
@@ -260,7 +281,13 @@ const list = () => {
               <p>Are you sure you want to delete this Question?</p>
               <br />
               <br />
-              <Button variant="primary" tone="critical" onClick={handleDelete}>
+              <Button
+                variant="primary"
+                tone="critical"
+                onClick={() => {
+                  handleDelete();
+                }}
+              >
                 Remove
               </Button>
               &nbsp;
@@ -358,7 +385,7 @@ const list = () => {
         </Button>
         <div className="quiz">
           <div id="answer-buttons">
-            {Questions?.question?.map((data, index) => (
+            {loaderdata?.map((data, index) => (
               <React.Fragment key={index}>
                 <Card>
                   <div className="card">
